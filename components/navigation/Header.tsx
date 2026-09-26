@@ -17,7 +17,7 @@ export const Header: React.FC = () => {
   const reportedLostCount = lostFoundItems.filter((i) => i.status === 'Reported').length;
 
   return (
-    <header className="sticky top-0 z-30 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 px-4 py-3 shadow-md">
+    <header className="sticky top-0 z-30 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 px-4 py-3 shadow-md pt-[calc(0.75rem+env(safe-area-inset-top))]">
       {/* Top row: Brand & Quick Action utilities */}
       <div className="flex items-center justify-between gap-2 mb-2">
         <div className="flex items-center gap-2">

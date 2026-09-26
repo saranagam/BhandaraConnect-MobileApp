@@ -3,7 +3,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { BhandaraEvent, ReelPost, LeaderboardUser, LostFoundItem } from '@/types/bhandara';
 import { INITIAL_BHANDARAS, INITIAL_REELS, INITIAL_LEADERBOARD, INITIAL_LOST_FOUND } from '@/data/mockBhandaras';
-
+import { useGeolocation } from '@/hooks/useGeolocation';
+import { calculateDistance } from '@/utils/distance';
 interface BhandaraContextType {
   events: BhandaraEvent[];
   reels: ReelPost[];
@@ -57,6 +58,7 @@ interface BhandaraContextType {
   addLostFoundItem: (item: Omit<LostFoundItem, 'id' | 'status' | 'dateReported'>) => void;
   resolveLostFoundItem: (itemId: string) => void;
   applyVolunteer: (application: { eventId: string; name: string; phone: string; role: string }) => void;
+  userLocation: { lat: number; lng: number } | null;
 }
 
 const BhandaraContext = createContext<BhandaraContextType | undefined>(undefined);
@@ -84,6 +86,28 @@ export const BhandaraProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [volunteerEventTarget, setVolunteerEventTarget] = useState<BhandaraEvent | null>(null);
 
   const [isLostFoundModalOpen, setIsLostFoundModalOpen] = useState<boolean>(false);
+
+  const { location: userLocation } = useGeolocation();
+
+  // Update distance when location changes
+  useEffect(() => {
+    if (userLocation) {
+      setEvents((prev) =>
+        prev.map((ev) => ({
+          ...ev,
+          location: {
+            ...ev.location,
+            distanceKm: calculateDistance(
+              userLocation.lat,
+              userLocation.lng,
+              ev.location.lat,
+              ev.location.lng
+            ),
+          },
+        }))
+      );
+    }
+  }, [userLocation]);
 
   // Load persistent state from localStorage if available
   useEffect(() => {
@@ -248,6 +272,7 @@ export const BhandaraProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         addLostFoundItem,
         resolveLostFoundItem,
         applyVolunteer,
+        userLocation,
       }}
     >
       {children}
