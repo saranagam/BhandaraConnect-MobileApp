@@ -32,7 +32,7 @@ export const GymRatMacroModal: React.FC<GymRatMacroModalProps> = ({ onClose }) =
     setResult(null);
 
     try {
-      const res = await fetch('/api/macro-estimator', {
+      const res = await fetch('/api/macro-estimator/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
