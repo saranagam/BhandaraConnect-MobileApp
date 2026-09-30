@@ -24,7 +24,7 @@ export const CategoryFilter: React.FC = () => {
   const categories = ['All', 'Lunch', 'Dinner', 'Breakfast', 'Prasad'];
 
   return (
-    <div className="px-4 py-3 bg-slate-900 border-b border-slate-800/60 space-y-2.5">
+    <div className="px-4 py-3 bg-[#FAF9F6] border-b border-stone-200 space-y-2.5">
       {/* View Mode Toggle & Radius Selector */}
       <div className="flex items-center justify-between gap-2">
         {/* Radius Filter Pills */}
@@ -35,8 +35,8 @@ export const CategoryFilter: React.FC = () => {
               onClick={() => setSelectedRadius(r.value)}
               className={`text-xs px-2.5 py-1 rounded-lg font-medium whitespace-nowrap transition-all ${
                 selectedRadius === r.value
-                  ? 'bg-slate-700 text-brand-400 border border-brand-500/40 font-semibold shadow-sm'
-                  : 'bg-slate-800/80 text-slate-300 hover:bg-slate-700/60 border border-slate-700/50'
+                  ? 'bg-amber-600 text-white border border-amber-600 font-semibold shadow-sm'
+                  : 'bg-white text-stone-700 hover:bg-stone-100 border border-stone-200'
               }`}
             >
               📍 {r.label}
@@ -45,13 +45,13 @@ export const CategoryFilter: React.FC = () => {
         </div>
 
         {/* View Mode Switcher */}
-        <div className="flex items-center bg-slate-800 p-1 rounded-xl border border-slate-700 shrink-0">
+        <div className="flex items-center bg-stone-200/80 p-1 rounded-xl border border-stone-300/60 shrink-0">
           <button
             onClick={() => setViewMode('list')}
             className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold transition ${
               viewMode === 'list'
-                ? 'bg-brand-500 text-white shadow-md'
-                : 'text-slate-400 hover:text-white'
+                ? 'bg-white text-stone-900 shadow-sm font-bold'
+                : 'text-stone-600 hover:text-stone-900'
             }`}
           >
             <List className="w-3.5 h-3.5" />
@@ -61,8 +61,8 @@ export const CategoryFilter: React.FC = () => {
             onClick={() => setViewMode('map')}
             className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold transition ${
               viewMode === 'map'
-                ? 'bg-brand-500 text-white shadow-md'
-                : 'text-slate-400 hover:text-white'
+                ? 'bg-white text-stone-900 shadow-sm font-bold'
+                : 'text-stone-600 hover:text-stone-900'
             }`}
           >
             <MapIcon className="w-3.5 h-3.5" />
@@ -73,8 +73,8 @@ export const CategoryFilter: React.FC = () => {
 
       {/* Category Pills */}
       <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
-        <span className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider flex items-center gap-1 shrink-0">
-          <Filter className="w-3 h-3 text-slate-400" />
+        <span className="text-[11px] text-stone-500 font-semibold uppercase tracking-wider flex items-center gap-1 shrink-0">
+          <Filter className="w-3 h-3 text-stone-400" />
           Meal:
         </span>
         {categories.map((cat) => (
@@ -83,8 +83,8 @@ export const CategoryFilter: React.FC = () => {
             onClick={() => setSelectedCategory(cat)}
             className={`text-xs px-3 py-1 rounded-full font-medium whitespace-nowrap transition-all ${
               selectedCategory === cat
-                ? 'bg-gradient-to-r from-brand-600 to-amber-500 text-white font-semibold shadow-md'
-                : 'bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700/60'
+                ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-white font-semibold shadow-sm'
+                : 'bg-white text-stone-700 hover:bg-stone-100 border border-stone-200'
             }`}
           >
             {cat}

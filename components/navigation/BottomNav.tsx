@@ -16,7 +16,7 @@ export const BottomNav: React.FC = () => {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 max-w-md mx-auto z-40 bg-slate-900/95 backdrop-blur-lg border-t border-slate-800/80 px-2 py-1.5 shadow-2xl pb-[calc(0.375rem+env(safe-area-inset-bottom))]">
+    <nav className="fixed bottom-0 left-0 right-0 max-w-md mx-auto z-40 bg-white/95 backdrop-blur-lg border-t border-stone-200/90 px-2 py-1.5 shadow-xl pb-[calc(0.375rem+env(safe-area-inset-bottom))]">
       <div className="flex items-center justify-around">
         {navItems.map((item) => {
           const Icon = item.icon;
@@ -27,18 +27,18 @@ export const BottomNav: React.FC = () => {
               whileTap={{ scale: 0.9 }}
               onClick={() => setActiveTab(item.id)}
               className={`flex flex-col items-center justify-center py-1.5 px-3 rounded-xl transition-colors duration-200 relative ${
-                isActive ? 'text-brand-400 font-bold' : 'text-slate-400 hover:text-slate-200'
+                isActive ? 'text-amber-600 font-bold' : 'text-stone-400 hover:text-stone-700'
               }`}
             >
               {isActive && (
                 <motion.span
                   layoutId="activeTabIndicator"
-                  className="absolute top-0 w-8 h-1 bg-gradient-to-r from-brand-500 to-amber-500 rounded-full shadow-lg shadow-brand-500/50"
+                  className="absolute top-0 w-8 h-1 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-full shadow-md shadow-amber-500/30"
                   transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                 />
               )}
-              <Icon className={`w-5 h-5 mb-0.5 transition-transform ${isActive ? 'scale-110 text-brand-400' : ''}`} />
-              <span className="text-[11px] font-medium tracking-tight">{item.label}</span>
+              <Icon className={`w-5 h-5 mb-0.5 transition-transform ${isActive ? 'scale-110 text-amber-600' : ''}`} />
+              <span className="text-[11px] font-semibold tracking-tight">{item.label}</span>
             </motion.button>
           );
         })}

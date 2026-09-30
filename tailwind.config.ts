@@ -9,24 +9,36 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        gold: {
+          50: '#fffbeb',
+          100: '#fef3c7',
+          200: '#fde68a',
+          300: '#fcd34d',
+          400: '#fbbf24',
+          500: '#f59e0b', // Divine Gold main
+          600: '#d97706', // Rich Gold
+          700: '#b45309', // Warm Deep Gold
+          800: '#92400e',
+          900: '#78350f',
+        },
         brand: {
-          50: '#fff7ed',
-          100: '#ffedd5',
-          200: '#fed7aa',
-          300: '#fdba74',
-          400: '#fb923c',
-          500: '#f97316', // Main saffron/orange PWA theme
-          600: '#ea580c',
-          700: '#c2410c',
-          800: '#9a3412',
-          900: '#7c2d12',
+          50: '#fffbeb',
+          100: '#fef3c7',
+          200: '#fde68a',
+          300: '#fcd34d',
+          400: '#fbbf24',
+          500: '#d97706', // Gold Accent
+          600: '#b45309',
+          700: '#92400e',
+          800: '#78350f',
+          900: '#451a03',
         },
         bhandara: {
-          gold: '#eab308',
-          saffron: '#f97316',
-          green: '#10b981',
-          slate: '#0f172a',
-          card: '#1e293b',
+          gold: '#d97706',
+          saffron: '#d97706',
+          green: '#16a34a',
+          slate: '#1c1917',
+          card: '#ffffff',
         }
       },
       animation: {

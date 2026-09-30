@@ -66,7 +66,7 @@ export default function Home() {
   });
 
   return (
-    <main className="flex-1 flex flex-col min-h-screen bg-slate-900 pb-20 relative overflow-x-hidden">
+    <main className="flex-1 flex flex-col min-h-screen bg-[#FAF9F6] text-stone-900 pb-20 relative overflow-x-hidden">
       {/* Header Bar */}
       <Header />
 
@@ -89,13 +89,13 @@ export default function Home() {
                   <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="text-center py-12 px-4 space-y-3 bg-slate-800/40 rounded-2xl border border-slate-800"
+                    className="text-center py-12 px-4 space-y-3 bg-white rounded-2xl border border-stone-200 shadow-sm"
                   >
-                    <div className="w-12 h-12 rounded-full bg-slate-800 text-slate-400 mx-auto flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-full bg-amber-50 text-amber-600 mx-auto flex items-center justify-center">
                       <Search className="w-6 h-6" />
                     </div>
-                    <h3 className="font-bold text-sm text-slate-200">No Bhandaras Found</h3>
-                    <p className="text-xs text-slate-400 max-w-xs mx-auto">
+                    <h3 className="font-bold text-sm text-stone-900">No Bhandaras Found</h3>
+                    <p className="text-xs text-stone-500 max-w-xs mx-auto">
                       Try adjusting your distance radius or search keywords to find active community meals.
                     </p>
                   </motion.div>
