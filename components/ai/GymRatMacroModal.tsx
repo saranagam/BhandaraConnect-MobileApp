@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { X, Dumbbell, Sparkles, Upload, Flame, CheckCircle2, AlertCircle, RefreshCw } from 'lucide-react';
 import { useBhandara } from '@/context/BhandaraContext';
 import { MacroResult } from '@/types/bhandara';
@@ -81,8 +82,21 @@ export const GymRatMacroModal: React.FC<GymRatMacroModalProps> = ({ onClose }) =
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 max-w-md mx-auto animate-in fade-in duration-200">
-      <div
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      onClick={() => {
+        setMacroPreselectedFood(undefined);
+        onClose();
+      }}
+      className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 max-w-md mx-auto"
+    >
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9, y: 15 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.9, y: 15 }}
+        transition={{ type: 'spring', damping: 25, stiffness: 350 }}
         className="bg-slate-900 border border-slate-700 rounded-3xl w-full p-5 shadow-2xl space-y-4 no-scrollbar max-h-[92vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
@@ -224,7 +238,7 @@ export const GymRatMacroModal: React.FC<GymRatMacroModalProps> = ({ onClose }) =
             </div>
           </div>
         )}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };

@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useBhandara } from '@/context/BhandaraContext';
 import { Header } from '@/components/navigation/Header';
 import { BottomNav } from '@/components/navigation/BottomNav';
@@ -65,72 +66,116 @@ export default function Home() {
   });
 
   return (
-    <main className="flex-1 flex flex-col min-h-screen bg-slate-900 pb-20 relative">
+    <main className="flex-1 flex flex-col min-h-screen bg-slate-900 pb-20 relative overflow-x-hidden">
       {/* Header Bar */}
       <Header />
 
-      {/* Explore Tab View */}
-      {activeTab === 'explore' && (
-        <div className="flex-1 flex flex-col">
-          <CategoryFilter />
+      {/* Animated Tab Views */}
+      <AnimatePresence mode="wait">
+        {activeTab === 'explore' && (
+          <motion.div
+            key="explore"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="flex-1 flex flex-col"
+          >
+            <CategoryFilter />
 
-          {viewMode === 'list' ? (
-            <div className="p-4 space-y-3">
-              {filteredEvents.length === 0 ? (
-                <div className="text-center py-12 px-4 space-y-3 bg-slate-800/40 rounded-2xl border border-slate-800">
-                  <div className="w-12 h-12 rounded-full bg-slate-800 text-slate-400 mx-auto flex items-center justify-center">
-                    <Search className="w-6 h-6" />
-                  </div>
-                  <h3 className="font-bold text-sm text-slate-200">No Bhandaras Found</h3>
-                  <p className="text-xs text-slate-400 max-w-xs mx-auto">
-                    Try adjusting your distance radius or search keywords to find active community meals.
-                  </p>
-                </div>
-              ) : (
-                filteredEvents.map((event) => <EventCard key={event.id} event={event} />)
-              )}
-            </div>
-          ) : (
-            <div className="p-4 flex-1">
-              <DynamicMap events={filteredEvents} />
-            </div>
-          )}
-        </div>
-      )}
+            {viewMode === 'list' ? (
+              <div className="p-4 space-y-3">
+                {filteredEvents.length === 0 ? (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="text-center py-12 px-4 space-y-3 bg-slate-800/40 rounded-2xl border border-slate-800"
+                  >
+                    <div className="w-12 h-12 rounded-full bg-slate-800 text-slate-400 mx-auto flex items-center justify-center">
+                      <Search className="w-6 h-6" />
+                    </div>
+                    <h3 className="font-bold text-sm text-slate-200">No Bhandaras Found</h3>
+                    <p className="text-xs text-slate-400 max-w-xs mx-auto">
+                      Try adjusting your distance radius or search keywords to find active community meals.
+                    </p>
+                  </motion.div>
+                ) : (
+                  filteredEvents.map((event, index) => (
+                    <EventCard key={event.id} event={event} index={index} />
+                  ))
+                )}
+              </div>
+            ) : (
+              <div className="p-4 flex-1">
+                <DynamicMap events={filteredEvents} />
+              </div>
+            )}
+          </motion.div>
+        )}
 
-      {/* Feed Tab View */}
-      {activeTab === 'feed' && <ReelsFeed />}
+        {activeTab === 'feed' && (
+          <motion.div
+            key="feed"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+          >
+            <ReelsFeed />
+          </motion.div>
+        )}
 
-      {/* Leaderboard Tab View */}
-      {activeTab === 'leaderboard' && <LeaderboardView />}
+        {activeTab === 'leaderboard' && (
+          <motion.div
+            key="leaderboard"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+          >
+            <LeaderboardView />
+          </motion.div>
+        )}
 
-      {/* Organize / Profile Tab View */}
-      {activeTab === 'profile' && <ProfileView />}
+        {activeTab === 'profile' && (
+          <motion.div
+            key="profile"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+          >
+            <ProfileView />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      {/* Modals & Drawers */}
-      {selectedEvent && (
-        <EventDrawer event={selectedEvent} onClose={() => setSelectedEvent(null)} />
-      )}
+      {/* Modals & Drawers with AnimatePresence */}
+      <AnimatePresence>
+        {selectedEvent && (
+          <EventDrawer event={selectedEvent} onClose={() => setSelectedEvent(null)} />
+        )}
 
-      {isMacroModalOpen && (
-        <GymRatMacroModal onClose={() => setIsMacroModalOpen(false)} />
-      )}
+        {isMacroModalOpen && (
+          <GymRatMacroModal onClose={() => setIsMacroModalOpen(false)} />
+        )}
 
-      {isPostReelModalOpen && (
-        <PostUpdateModal onClose={() => setIsPostReelModalOpen(false)} />
-      )}
+        {isPostReelModalOpen && (
+          <PostUpdateModal onClose={() => setIsPostReelModalOpen(false)} />
+        )}
 
-      {isVolunteerModalOpen && (
-        <VolunteerModal onClose={() => setIsVolunteerModalOpen(false)} />
-      )}
+        {isVolunteerModalOpen && (
+          <VolunteerModal onClose={() => setIsVolunteerModalOpen(false)} />
+        )}
 
-      {isOrganizeModalOpen && (
-        <OrganizeModal onClose={() => setIsOrganizeModalOpen(false)} />
-      )}
+        {isOrganizeModalOpen && (
+          <OrganizeModal onClose={() => setIsOrganizeModalOpen(false)} />
+        )}
 
-      {isLostFoundModalOpen && (
-        <LostFoundModal onClose={() => setIsLostFoundModalOpen(false)} />
-      )}
+        {isLostFoundModalOpen && (
+          <LostFoundModal onClose={() => setIsLostFoundModalOpen(false)} />
+        )}
+      </AnimatePresence>
 
       {/* Fixed Bottom Navigation */}
       <BottomNav />

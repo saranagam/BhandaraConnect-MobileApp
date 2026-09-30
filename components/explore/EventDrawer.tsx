@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import {
   X,
   MapPin,
@@ -83,8 +84,18 @@ export const EventDrawer: React.FC<EventDrawerProps> = ({ event, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex justify-end flex-col max-w-md mx-auto animate-in fade-in duration-200">
-      <div
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      onClick={onClose}
+      className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex justify-end flex-col max-w-md mx-auto"
+    >
+      <motion.div
+        initial={{ y: '100%' }}
+        animate={{ y: 0 }}
+        exit={{ y: '100%' }}
+        transition={{ type: 'spring', damping: 25, stiffness: 300 }}
         className="bg-slate-900 border-t border-slate-700 rounded-t-3xl max-h-[90vh] overflow-y-auto flex flex-col w-full shadow-2xl no-scrollbar"
         onClick={(e) => e.stopPropagation()}
       >
@@ -375,7 +386,7 @@ export const EventDrawer: React.FC<EventDrawerProps> = ({ event, onClose }) => {
             </a>
           </div>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };

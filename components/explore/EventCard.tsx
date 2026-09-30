@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { motion } from 'framer-motion';
 import {
   MapPin,
   Clock,
@@ -19,9 +20,10 @@ import { useBhandara } from '@/context/BhandaraContext';
 
 interface EventCardProps {
   event: BhandaraEvent;
+  index?: number;
 }
 
-export const EventCard: React.FC<EventCardProps> = ({ event }) => {
+export const EventCard: React.FC<EventCardProps> = ({ event, index = 0 }) => {
   const { setSelectedEvent, setIsMacroModalOpen, setMacroPreselectedFood } = useBhandara();
 
   const getCrowdBadge = (level: CrowdLevel) => {
@@ -54,7 +56,12 @@ export const EventCard: React.FC<EventCardProps> = ({ event }) => {
   const activePercentage = totalVotes > 0 ? Math.round((event.votes.yes / totalVotes) * 100) : 100;
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.25, delay: index * 0.05 }}
+      whileHover={{ y: -3, transition: { duration: 0.15 } }}
+      whileTap={{ scale: 0.98 }}
       onClick={() => setSelectedEvent(event)}
       className="bg-slate-800/90 hover:bg-slate-800 border border-slate-700/80 rounded-2xl p-4 shadow-xl hover:shadow-brand-500/10 transition-all duration-200 cursor-pointer relative overflow-hidden group mb-3.5"
     >
@@ -152,6 +159,6 @@ export const EventCard: React.FC<EventCardProps> = ({ event }) => {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };

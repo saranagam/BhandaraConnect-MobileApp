@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { motion } from 'framer-motion';
 import { Compass, PlaySquare, Trophy, User } from 'lucide-react';
 import { useBhandara } from '@/context/BhandaraContext';
 
@@ -21,21 +22,24 @@ export const BottomNav: React.FC = () => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
           return (
-            <button
+            <motion.button
               key={item.id}
+              whileTap={{ scale: 0.9 }}
               onClick={() => setActiveTab(item.id)}
-              className={`flex flex-col items-center justify-center py-1.5 px-3 rounded-xl transition-all duration-200 relative ${
-                isActive
-                  ? 'text-brand-500 font-bold scale-105'
-                  : 'text-slate-400 hover:text-slate-200'
+              className={`flex flex-col items-center justify-center py-1.5 px-3 rounded-xl transition-colors duration-200 relative ${
+                isActive ? 'text-brand-400 font-bold' : 'text-slate-400 hover:text-slate-200'
               }`}
             >
               {isActive && (
-                <span className="absolute top-0 w-8 h-1 bg-brand-500 rounded-full shadow-lg shadow-brand-500/50 animate-pulse" />
+                <motion.span
+                  layoutId="activeTabIndicator"
+                  className="absolute top-0 w-8 h-1 bg-gradient-to-r from-brand-500 to-amber-500 rounded-full shadow-lg shadow-brand-500/50"
+                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                />
               )}
-              <Icon className={`w-5 h-5 mb-0.5 transition-transform ${isActive ? 'scale-110 text-brand-500' : ''}`} />
+              <Icon className={`w-5 h-5 mb-0.5 transition-transform ${isActive ? 'scale-110 text-brand-400' : ''}`} />
               <span className="text-[11px] font-medium tracking-tight">{item.label}</span>
-            </button>
+            </motion.button>
           );
         })}
       </div>

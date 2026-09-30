@@ -27,9 +27,6 @@ export const Header: React.FC = () => {
           <div>
             <h1 className="font-extrabold text-lg tracking-tight bg-gradient-to-r from-brand-400 via-amber-300 to-white bg-clip-text text-transparent flex items-center gap-1">
               BhandaraConnect
-              <span className="text-[10px] uppercase font-semibold px-1.5 py-0.5 rounded bg-brand-500/20 text-brand-400 border border-brand-500/30">
-                PWA
-              </span>
             </h1>
             <div className="flex items-center gap-1 text-xs text-slate-400 font-medium">
               <MapPin className="w-3 h-3 text-brand-500" />
