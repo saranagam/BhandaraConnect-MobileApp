@@ -53,27 +53,27 @@ export const LeaderboardView: React.FC = () => {
       </div>
 
       {/* Leaderboard Tabs: Active Volunteers vs Top Donors */}
-      <div className="flex items-center bg-stone-200/80 p-1.5 rounded-2xl border border-stone-300/60">
+      <div className="flex items-center bg-stone-200/80 dark:bg-slate-800/80 p-1.5 rounded-2xl border border-stone-300/60 dark:border-slate-700/60">
         <button
           onClick={() => setActiveTab('volunteer')}
           className={`flex-1 py-2.5 text-xs font-extrabold rounded-xl transition flex items-center justify-center gap-1.5 ${
             activeTab === 'volunteer'
-              ? 'bg-white text-stone-900 shadow-sm'
-              : 'text-stone-600 hover:text-stone-900'
+              ? 'bg-white dark:bg-slate-900 text-stone-900 dark:text-stone-100 shadow-sm'
+              : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
           }`}
         >
-          <Users className="w-4 h-4 text-amber-600" />
+          <Users className="w-4 h-4 text-amber-600 dark:text-amber-500" />
           Active Volunteers
         </button>
         <button
           onClick={() => setActiveTab('donor')}
           className={`flex-1 py-2.5 text-xs font-extrabold rounded-xl transition flex items-center justify-center gap-1.5 ${
             activeTab === 'donor'
-              ? 'bg-white text-stone-900 shadow-sm'
-              : 'text-stone-600 hover:text-stone-900'
+              ? 'bg-white dark:bg-slate-900 text-stone-900 dark:text-stone-100 shadow-sm'
+              : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
           }`}
         >
-          <Award className="w-4 h-4 text-amber-600" />
+          <Award className="w-4 h-4 text-amber-600 dark:text-amber-500" />
           Top Donors
         </button>
       </div>
@@ -87,8 +87,10 @@ export const LeaderboardView: React.FC = () => {
           return (
             <div
               key={user.id}
-              className={`bg-white border p-3.5 rounded-2xl flex items-center justify-between transition-all hover:bg-stone-50 shadow-sm ${
-                isTop3 ? 'border-amber-300 bg-amber-50/40 shadow-amber-500/5' : 'border-stone-200'
+              className={`bg-white dark:bg-slate-900 border p-3.5 rounded-2xl flex items-center justify-between transition-all hover:bg-stone-50 dark:hover:bg-slate-800/80 shadow-sm ${
+                isTop3
+                  ? 'border-amber-300 dark:border-amber-800/80 bg-amber-50/40 dark:bg-amber-950/20 shadow-amber-500/5'
+                  : 'border-stone-200 dark:border-slate-800'
               }`}
             >
               <div className="flex items-center gap-3">
@@ -98,10 +100,10 @@ export const LeaderboardView: React.FC = () => {
                     rankNumber === 1
                       ? 'bg-amber-500 text-white shadow-sm'
                       : rankNumber === 2
-                      ? 'bg-stone-300 text-stone-900'
+                      ? 'bg-stone-300 dark:bg-slate-700 text-stone-900 dark:text-stone-100'
                       : rankNumber === 3
                       ? 'bg-amber-700 text-white'
-                      : 'bg-stone-200 text-stone-600'
+                      : 'bg-stone-200 dark:bg-slate-800 text-stone-600 dark:text-stone-400'
                   }`}
                 >
                   #{rankNumber}
@@ -111,14 +113,14 @@ export const LeaderboardView: React.FC = () => {
                 <img
                   src={user.avatar}
                   alt={user.name}
-                  className="w-10 h-10 rounded-full object-cover border-2 border-stone-200 shrink-0"
+                  className="w-10 h-10 rounded-full object-cover border-2 border-stone-200 dark:border-slate-700 shrink-0"
                 />
 
                 {/* Info */}
                 <div>
                   <div className="flex items-center gap-1.5">
-                    <h4 className="font-bold text-xs text-stone-900">{user.name}</h4>
-                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                    <h4 className="font-bold text-xs text-stone-900 dark:text-stone-100">{user.name}</h4>
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                   </div>
                   <div className="flex items-center gap-1.5 mt-0.5">
                     <span
@@ -134,11 +136,11 @@ export const LeaderboardView: React.FC = () => {
 
               {/* Stats: Meals & Points */}
               <div className="text-right shrink-0">
-                <div className="font-extrabold text-xs text-amber-600 flex items-center justify-end gap-1">
+                <div className="font-extrabold text-xs text-amber-600 dark:text-amber-400 flex items-center justify-end gap-1">
                   <Flame className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
                   <span>{user.points} pts</span>
                 </div>
-                <span className="text-[11px] text-stone-500 font-medium">
+                <span className="text-[11px] text-stone-500 dark:text-stone-400 font-medium">
                   {user.mealsServed.toLocaleString()} Meals
                 </span>
               </div>

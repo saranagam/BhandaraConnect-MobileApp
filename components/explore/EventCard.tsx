@@ -63,7 +63,7 @@ export const EventCard: React.FC<EventCardProps> = ({ event, index = 0 }) => {
       whileHover={{ y: -2, transition: { duration: 0.15 } }}
       whileTap={{ scale: 0.98 }}
       onClick={() => setSelectedEvent(event)}
-      className="bg-white hover:bg-stone-50/80 border border-stone-200/90 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer relative overflow-hidden group mb-3.5"
+      className="bg-white dark:bg-slate-900 hover:bg-stone-50/80 dark:hover:bg-slate-800/80 border border-stone-200/90 dark:border-slate-800 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer relative overflow-hidden group mb-3.5"
     >
       {/* Top Banner Image & Status Overlay */}
       <div className="relative h-36 w-full rounded-xl overflow-hidden mb-3">
@@ -84,14 +84,14 @@ export const EventCard: React.FC<EventCardProps> = ({ event, index = 0 }) => {
         <div className="absolute top-2.5 right-2.5">{getCrowdBadge(event.crowdLevel)}</div>
 
         {/* Distance Badge */}
-        <div className="absolute bottom-2.5 left-2.5 flex items-center gap-1 bg-white/90 backdrop-blur-md text-stone-800 text-xs font-semibold px-2.5 py-1 rounded-lg border border-stone-200 shadow-sm">
-          <MapPin className="w-3.5 h-3.5 text-amber-600" />
+        <div className="absolute bottom-2.5 left-2.5 flex items-center gap-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md text-stone-800 dark:text-stone-200 text-xs font-semibold px-2.5 py-1 rounded-lg border border-stone-200 dark:border-slate-700 shadow-sm">
+          <MapPin className="w-3.5 h-3.5 text-amber-600 dark:text-amber-500" />
           <span>{event.location.distanceKm} km away</span>
         </div>
 
         {/* Active Vote Confidence */}
-        <div className="absolute bottom-2.5 right-2.5 flex items-center gap-1 bg-emerald-50/90 backdrop-blur-md text-emerald-700 text-xs font-semibold px-2.5 py-1 rounded-lg border border-emerald-200 shadow-sm">
-          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+        <div className="absolute bottom-2.5 right-2.5 flex items-center gap-1 bg-emerald-50/90 dark:bg-emerald-950/80 backdrop-blur-md text-emerald-700 dark:text-emerald-300 text-xs font-semibold px-2.5 py-1 rounded-lg border border-emerald-200 dark:border-emerald-800 shadow-sm">
+          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
           <span>{activePercentage}% Active</span>
         </div>
       </div>
@@ -101,17 +101,17 @@ export const EventCard: React.FC<EventCardProps> = ({ event, index = 0 }) => {
         {/* Title & Organizer */}
         <div>
           <div className="flex items-start justify-between gap-2">
-            <h3 className="font-bold text-base text-stone-900 group-hover:text-amber-600 transition-colors line-clamp-1">
+            <h3 className="font-bold text-base text-stone-900 dark:text-stone-100 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors line-clamp-1">
               {event.title}
             </h3>
-            <ChevronRight className="w-5 h-5 text-stone-400 group-hover:text-amber-600 group-hover:translate-x-1 transition-all shrink-0" />
+            <ChevronRight className="w-5 h-5 text-stone-400 dark:text-stone-500 group-hover:text-amber-600 dark:group-hover:text-amber-400 group-hover:translate-x-1 transition-all shrink-0" />
           </div>
 
-          <div className="flex items-center gap-1.5 mt-0.5 text-xs text-stone-500">
-            <span className="font-medium text-stone-600">{event.organizer.name}</span>
+          <div className="flex items-center gap-1.5 mt-0.5 text-xs text-stone-500 dark:text-stone-400">
+            <span className="font-medium text-stone-600 dark:text-stone-300">{event.organizer.name}</span>
             {event.organizer.isVerified && (
-              <span className="flex items-center gap-0.5 text-emerald-700 font-semibold bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded text-[10px]">
-                <ShieldCheck className="w-3 h-3 text-emerald-600" />
+              <span className="flex items-center gap-0.5 text-emerald-700 dark:text-emerald-400 font-semibold bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 px-1.5 py-0.5 rounded text-[10px]">
+                <ShieldCheck className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                 Verified
               </span>
             )}
@@ -125,8 +125,8 @@ export const EventCard: React.FC<EventCardProps> = ({ event, index = 0 }) => {
               key={item.id}
               className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-md border ${
                 item.isPopular
-                  ? 'bg-amber-100 text-amber-900 border-amber-300 font-bold'
-                  : 'bg-stone-100 text-stone-700 border-stone-200'
+                  ? 'bg-amber-100 dark:bg-amber-950/70 text-amber-900 dark:text-amber-200 border-amber-300 dark:border-amber-700 font-bold'
+                  : 'bg-stone-100 dark:bg-slate-800 text-stone-700 dark:text-stone-300 border-stone-200 dark:border-slate-700'
               }`}
             >
               {item.name}
@@ -135,26 +135,26 @@ export const EventCard: React.FC<EventCardProps> = ({ event, index = 0 }) => {
         </div>
 
         {/* Meta details bar: Hygiene, Packing, Timing */}
-        <div className="flex items-center justify-between pt-2 border-t border-stone-100 text-xs text-stone-500">
+        <div className="flex items-center justify-between pt-2 border-t border-stone-100 dark:border-slate-800 text-xs text-stone-500 dark:text-stone-400">
           <div className="flex items-center gap-3">
             {/* Hygiene score */}
-            <div className="flex items-center gap-1 text-amber-600 font-bold">
+            <div className="flex items-center gap-1 text-amber-600 dark:text-amber-400 font-bold">
               <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
               <span>{event.hygieneRating}</span>
             </div>
 
             {/* Packing badge */}
             <div className="flex items-center gap-1">
-              <Package className="w-3.5 h-3.5 text-stone-400" />
-              <span className={event.packingAvailable ? 'text-emerald-700 font-medium' : 'text-stone-400'}>
+              <Package className="w-3.5 h-3.5 text-stone-400 dark:text-stone-500" />
+              <span className={event.packingAvailable ? 'text-emerald-700 dark:text-emerald-400 font-medium' : 'text-stone-400 dark:text-stone-500'}>
                 Packing: {event.packingAvailable ? 'Yes' : 'No'}
               </span>
             </div>
           </div>
 
           {/* Time text */}
-          <div className="flex items-center gap-1 text-stone-500">
-            <Clock className="w-3.5 h-3.5 text-amber-600" />
+          <div className="flex items-center gap-1 text-stone-500 dark:text-stone-400">
+            <Clock className="w-3.5 h-3.5 text-amber-600 dark:text-amber-500" />
             <span className="font-medium">{event.timing.endTime}</span>
           </div>
         </div>

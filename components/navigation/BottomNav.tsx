@@ -16,7 +16,7 @@ export const BottomNav: React.FC = () => {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 max-w-md mx-auto z-40 bg-white/95 backdrop-blur-lg border-t border-stone-200/90 px-2 py-1.5 shadow-xl pb-[calc(0.375rem+env(safe-area-inset-bottom))]">
+    <nav className="fixed bottom-0 left-0 right-0 max-w-md mx-auto z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg border-t border-stone-200/90 dark:border-slate-800/90 px-2 py-1.5 shadow-xl pb-[calc(0.375rem+env(safe-area-inset-bottom))] transition-colors duration-200">
       <div className="flex items-center justify-around">
         {navItems.map((item) => {
           const Icon = item.icon;
@@ -27,7 +27,7 @@ export const BottomNav: React.FC = () => {
               whileTap={{ scale: 0.9 }}
               onClick={() => setActiveTab(item.id)}
               className={`flex flex-col items-center justify-center py-1.5 px-3 rounded-xl transition-colors duration-200 relative ${
-                isActive ? 'text-amber-600 font-bold' : 'text-stone-400 hover:text-stone-700'
+                isActive ? 'text-amber-600 dark:text-amber-500 font-bold' : 'text-stone-400 dark:text-stone-500 hover:text-stone-700 dark:hover:text-stone-300'
               }`}
             >
               {isActive && (
