@@ -5,12 +5,19 @@ import { BhandaraEvent, ReelPost, LeaderboardUser, LostFoundItem } from '@/types
 import { INITIAL_BHANDARAS, INITIAL_REELS, INITIAL_LEADERBOARD, INITIAL_LOST_FOUND } from '@/data/mockBhandaras';
 import { useGeolocation } from '@/hooks/useGeolocation';
 import { calculateDistance } from '@/utils/distance';
+export type ThemeMode = 'system' | 'light' | 'dark';
+
 interface BhandaraContextType {
   events: BhandaraEvent[];
   reels: ReelPost[];
   leaderboard: LeaderboardUser[];
   lostFoundItems: LostFoundItem[];
   
+  // Theme & Appearance State
+  themeMode: ThemeMode;
+  setThemeMode: (mode: ThemeMode) => void;
+  resolvedTheme: 'light' | 'dark';
+
   // Navigation & View State
   activeTab: 'explore' | 'feed' | 'leaderboard' | 'profile';
   setActiveTab: (tab: 'explore' | 'feed' | 'leaderboard' | 'profile') => void;
@@ -69,6 +76,17 @@ export const BhandaraProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [leaderboard, setLeaderboard] = useState<LeaderboardUser[]>(INITIAL_LEADERBOARD);
   const [lostFoundItems, setLostFoundItems] = useState<LostFoundItem[]>(INITIAL_LOST_FOUND);
   
+  // Theme State
+  const [themeMode, setThemeModeState] = useState<ThemeMode>('system');
+  const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>('light');
+
+  const setThemeMode = (mode: ThemeMode) => {
+    setThemeModeState(mode);
+    try {
+      localStorage.setItem('bhandara_theme', mode);
+    } catch (e) {}
+  };
+
   const [activeTab, setActiveTab] = useState<'explore' | 'feed' | 'leaderboard' | 'profile'>('explore');
   const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
   const [selectedRadius, setSelectedRadius] = useState<number>(0); // 0 = all radii
@@ -88,6 +106,49 @@ export const BhandaraProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [isLostFoundModalOpen, setIsLostFoundModalOpen] = useState<boolean>(false);
 
   const { location: userLocation } = useGeolocation();
+
+  // Load saved theme preference
+  useEffect(() => {
+    try {
+      const savedTheme = localStorage.getItem('bhandara_theme') as ThemeMode | null;
+      if (savedTheme && (savedTheme === 'system' || savedTheme === 'light' || savedTheme === 'dark')) {
+        setThemeModeState(savedTheme);
+      }
+    } catch (e) {}
+  }, []);
+
+  // Theme observer: sync HTML root class according to selected mode or system prefers-color-scheme
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+    const updateTheme = () => {
+      const isDark = themeMode === 'dark' || (themeMode === 'system' && mediaQuery.matches);
+      setResolvedTheme(isDark ? 'dark' : 'light');
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    };
+
+    updateTheme();
+
+    const handleMediaChange = (e: MediaQueryListEvent) => {
+      if (themeMode === 'system') {
+        const isDark = e.matches;
+        setResolvedTheme(isDark ? 'dark' : 'light');
+        if (isDark) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      }
+    };
+
+    mediaQuery.addEventListener('change', handleMediaChange);
+    return () => mediaQuery.removeEventListener('change', handleMediaChange);
+  }, [themeMode]);
 
   // Update distance when location changes
   useEffect(() => {
@@ -239,6 +300,9 @@ export const BhandaraProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         reels,
         leaderboard,
         lostFoundItems,
+        themeMode,
+        setThemeMode,
+        resolvedTheme,
         activeTab,
         setActiveTab,
         viewMode,
