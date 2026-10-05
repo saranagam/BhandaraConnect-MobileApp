@@ -5,6 +5,8 @@ import { BhandaraEvent, ReelPost, LeaderboardUser, LostFoundItem } from '@/types
 import { INITIAL_BHANDARAS, INITIAL_REELS, INITIAL_LEADERBOARD, INITIAL_LOST_FOUND } from '@/data/mockBhandaras';
 import { useGeolocation } from '@/hooks/useGeolocation';
 import { calculateDistance } from '@/utils/distance';
+import { db } from '@/lib/firebase';
+import { collection, onSnapshot, doc, setDoc, updateDoc } from 'firebase/firestore';
 export type ThemeMode = 'system' | 'light' | 'dark';
 
 interface BhandaraContextType {
@@ -170,39 +172,68 @@ export const BhandaraProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
   }, [userLocation]);
 
-  // Load persistent state from localStorage if available
+  // Firestore Realtime Listeners & Local Storage Fallback
   useEffect(() => {
-    try {
-      const savedEvents = localStorage.getItem('bhandara_events');
-      if (savedEvents) {
-        const parsed = JSON.parse(savedEvents);
-        const updated = parsed.map((ev: BhandaraEvent) => {
-          const defaultEv = INITIAL_BHANDARAS.find((i) => i.id === ev.id);
-          if (defaultEv && (ev.image.includes('unsplash.com') || !ev.image.startsWith('/images/events/'))) {
-            return { ...ev, image: defaultEv.image };
-          }
-          return ev;
-        });
-        setEvents(updated);
-      }
-      
-      const savedReels = localStorage.getItem('bhandara_reels');
-      if (savedReels) {
-        const parsedReels = JSON.parse(savedReels);
-        const updatedReels = parsedReels.map((r: ReelPost) => {
-          const defaultReel = INITIAL_REELS.find((i) => i.id === r.id);
-          if (defaultReel && (r.mediaUrl.includes('unsplash.com') || !r.mediaUrl.startsWith('/images/events/'))) {
-            return { ...r, mediaUrl: defaultReel.mediaUrl };
-          }
-          return r;
-        });
-        setReels(updatedReels);
-      }
+    if (db) {
+      const unsubEvents = onSnapshot(collection(db, 'bhandara_events'), (snapshot) => {
+        if (!snapshot.empty) {
+          const remoteEvents = snapshot.docs.map((doc) => doc.data() as BhandaraEvent);
+          setEvents(remoteEvents);
+        }
+      });
 
-      const savedLF = localStorage.getItem('bhandara_lostfound');
-      if (savedLF) setLostFoundItems(JSON.parse(savedLF));
-    } catch (e) {
-      console.error('Error loading local state', e);
+      const unsubReels = onSnapshot(collection(db, 'bhandara_reels'), (snapshot) => {
+        if (!snapshot.empty) {
+          const remoteReels = snapshot.docs.map((doc) => doc.data() as ReelPost);
+          setReels(remoteReels);
+        }
+      });
+
+      const unsubLF = onSnapshot(collection(db, 'bhandara_lostfound'), (snapshot) => {
+        if (!snapshot.empty) {
+          const remoteLF = snapshot.docs.map((doc) => doc.data() as LostFoundItem);
+          setLostFoundItems(remoteLF);
+        }
+      });
+
+      return () => {
+        unsubEvents();
+        unsubReels();
+        unsubLF();
+      };
+    } else {
+      try {
+        const savedEvents = localStorage.getItem('bhandara_events');
+        if (savedEvents) {
+          const parsed = JSON.parse(savedEvents);
+          const updated = parsed.map((ev: BhandaraEvent) => {
+            const defaultEv = INITIAL_BHANDARAS.find((i) => i.id === ev.id);
+            if (defaultEv && (ev.image.includes('unsplash.com') || !ev.image.startsWith('/images/events/'))) {
+              return { ...ev, image: defaultEv.image };
+            }
+            return ev;
+          });
+          setEvents(updated);
+        }
+        
+        const savedReels = localStorage.getItem('bhandara_reels');
+        if (savedReels) {
+          const parsedReels = JSON.parse(savedReels);
+          const updatedReels = parsedReels.map((r: ReelPost) => {
+            const defaultReel = INITIAL_REELS.find((i) => i.id === r.id);
+            if (defaultReel && (r.mediaUrl.includes('unsplash.com') || !r.mediaUrl.startsWith('/images/events/'))) {
+              return { ...r, mediaUrl: defaultReel.mediaUrl };
+            }
+            return r;
+          });
+          setReels(updatedReels);
+        }
+
+        const savedLF = localStorage.getItem('bhandara_lostfound');
+        if (savedLF) setLostFoundItems(JSON.parse(savedLF));
+      } catch (e) {
+        console.error('Error loading local state', e);
+      }
     }
   }, []);
 
@@ -267,7 +298,7 @@ export const BhandaraProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     saveReels(updated);
   };
 
-  const addReel = (newReelData: Omit<ReelPost, 'id' | 'likes' | 'timestamp'>) => {
+  const addReel = async (newReelData: Omit<ReelPost, 'id' | 'likes' | 'timestamp'>) => {
     const newReel: ReelPost = {
       ...newReelData,
       id: `reel-${Date.now()}`,
@@ -276,18 +307,32 @@ export const BhandaraProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       timestamp: 'Just now',
     };
     saveReels([newReel, ...reels]);
+    if (db) {
+      try {
+        await setDoc(doc(db, 'bhandara_reels', newReel.id), newReel);
+      } catch (e) {
+        console.error('Error writing reel to Firestore', e);
+      }
+    }
   };
 
-  const addEvent = (newEventData: Omit<BhandaraEvent, 'id' | 'votes'>) => {
+  const addEvent = async (newEventData: Omit<BhandaraEvent, 'id' | 'votes'>) => {
     const newEvent: BhandaraEvent = {
       ...newEventData,
       id: `bhandara-${Date.now()}`,
       votes: { yes: 1, no: 0, userVoted: 'yes' },
     };
     saveEvents([newEvent, ...events]);
+    if (db) {
+      try {
+        await setDoc(doc(db, 'bhandara_events', newEvent.id), newEvent);
+      } catch (e) {
+        console.error('Error writing event to Firestore', e);
+      }
+    }
   };
 
-  const addLostFoundItem = (itemData: Omit<LostFoundItem, 'id' | 'status' | 'dateReported'>) => {
+  const addLostFoundItem = async (itemData: Omit<LostFoundItem, 'id' | 'status' | 'dateReported'>) => {
     const newItem: LostFoundItem = {
       ...itemData,
       id: `lf-${Date.now()}`,
@@ -295,13 +340,27 @@ export const BhandaraProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       dateReported: 'Just now',
     };
     saveLostFound([newItem, ...lostFoundItems]);
+    if (db) {
+      try {
+        await setDoc(doc(db, 'bhandara_lostfound', newItem.id), newItem);
+      } catch (e) {
+        console.error('Error writing lost & found item to Firestore', e);
+      }
+    }
   };
 
-  const resolveLostFoundItem = (itemId: string) => {
+  const resolveLostFoundItem = async (itemId: string) => {
     const updated = lostFoundItems.map((item) =>
       item.id === itemId ? { ...item, status: 'Resolved' as const } : item
     );
     saveLostFound(updated);
+    if (db) {
+      try {
+        await updateDoc(doc(db, 'bhandara_lostfound', itemId), { status: 'Resolved' });
+      } catch (e) {
+        console.error('Error updating lost & found status in Firestore', e);
+      }
+    }
   };
 
   const applyVolunteer = (app: { eventId: string; name: string; phone: string; role: string }) => {
