@@ -174,10 +174,30 @@ export const BhandaraProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   useEffect(() => {
     try {
       const savedEvents = localStorage.getItem('bhandara_events');
-      if (savedEvents) setEvents(JSON.parse(savedEvents));
+      if (savedEvents) {
+        const parsed = JSON.parse(savedEvents);
+        const updated = parsed.map((ev: BhandaraEvent) => {
+          const defaultEv = INITIAL_BHANDARAS.find((i) => i.id === ev.id);
+          if (defaultEv && (ev.image.includes('unsplash.com') || !ev.image.startsWith('/images/events/'))) {
+            return { ...ev, image: defaultEv.image };
+          }
+          return ev;
+        });
+        setEvents(updated);
+      }
       
       const savedReels = localStorage.getItem('bhandara_reels');
-      if (savedReels) setReels(JSON.parse(savedReels));
+      if (savedReels) {
+        const parsedReels = JSON.parse(savedReels);
+        const updatedReels = parsedReels.map((r: ReelPost) => {
+          const defaultReel = INITIAL_REELS.find((i) => i.id === r.id);
+          if (defaultReel && (r.mediaUrl.includes('unsplash.com') || !r.mediaUrl.startsWith('/images/events/'))) {
+            return { ...r, mediaUrl: defaultReel.mediaUrl };
+          }
+          return r;
+        });
+        setReels(updatedReels);
+      }
 
       const savedLF = localStorage.getItem('bhandara_lostfound');
       if (savedLF) setLostFoundItems(JSON.parse(savedLF));
