@@ -6,7 +6,7 @@ const config: CapacitorConfig = {
   webDir: 'out',
 
   server: {
-    url: 'https://YOUR-VERCEL-DOMAIN.vercel.app',
+    url: 'https://bhandaraconnect.vercel.app',
     cleartext: false
   },
 
