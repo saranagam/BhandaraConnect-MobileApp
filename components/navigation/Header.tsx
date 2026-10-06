@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Compass, Search, Dumbbell, MapPin, PackageSearch, Sparkles, Sun, Moon, Smartphone } from 'lucide-react';
+import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from '@clerk/nextjs';
 import { useBhandara } from '@/context/BhandaraContext';
 
 export const Header: React.FC = () => {
@@ -58,6 +59,28 @@ export const Header: React.FC = () => {
 
         {/* Action icons */}
         <div className="flex items-center gap-1.5">
+          <SignedOut>
+            <SignInButton mode="modal">
+              <button
+                type="button"
+                className="text-xs font-bold text-stone-700 dark:text-stone-200 px-2.5 py-1.5 rounded-lg border border-stone-200 dark:border-slate-700 bg-white dark:bg-slate-800"
+              >
+                Sign in
+              </button>
+            </SignInButton>
+            <SignUpButton mode="modal">
+              <button
+                type="button"
+                className="text-xs font-bold text-white px-2.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600"
+              >
+                Sign up
+              </button>
+            </SignUpButton>
+          </SignedOut>
+          <SignedIn>
+            <UserButton afterSignOutUrl="/login/" />
+          </SignedIn>
+
           {/* Mobile Theme Switcher Toggle */}
           <button
             onClick={cycleTheme}

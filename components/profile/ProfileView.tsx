@@ -16,28 +16,66 @@ import {
   Moon,
   Smartphone,
   Palette,
+  LogOut,
 } from 'lucide-react';
+import { useClerk, useUser } from '@clerk/nextjs';
 import { useBhandara } from '@/context/BhandaraContext';
 
 export const ProfileView: React.FC = () => {
   const { events, setIsOrganizeModalOpen, setSelectedEvent, themeMode, setThemeMode, resolvedTheme } = useBhandara();
+  const { user } = useUser();
+  const { signOut } = useClerk();
 
   const hostedEvents = events;
+  const displayName =
+    user?.fullName ||
+    user?.primaryEmailAddress?.emailAddress ||
+    'Shree Sanatan Seva Samiti';
+  const avatarUrl =
+    user?.imageUrl ||
+    'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80';
 
   return (
     <div className="p-4 space-y-4 pb-20">
+      {/* Signed-in account */}
+      {user && (
+        <div className="bg-white dark:bg-slate-900 border border-stone-200 dark:border-slate-800 p-4 rounded-2xl flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3 min-w-0">
+            <img
+              src={avatarUrl}
+              alt=""
+              className="w-10 h-10 rounded-xl object-cover border border-amber-400/60 shrink-0"
+            />
+            <div className="min-w-0">
+              <p className="font-bold text-sm text-stone-900 dark:text-stone-100 truncate">{displayName}</p>
+              <p className="text-[11px] text-stone-500 truncate">
+                {user.primaryEmailAddress?.emailAddress}
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => signOut({ redirectUrl: '/login/' })}
+            className="shrink-0 flex items-center gap-1.5 text-xs font-semibold text-stone-600 dark:text-stone-300 bg-stone-100 dark:bg-slate-800 px-3 py-2 rounded-xl hover:bg-stone-200 dark:hover:bg-slate-700 transition"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+            Sign out
+          </button>
+        </div>
+      )}
+
       {/* Organizer Profile Card */}
       <div className="bg-white dark:bg-slate-900 border border-stone-200 dark:border-slate-800 p-5 rounded-3xl shadow-sm space-y-4 relative overflow-hidden transition-colors duration-200">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
             <img
-              src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80"
+              src={avatarUrl}
               alt="Organizer Avatar"
               className="w-14 h-14 rounded-2xl object-cover border-2 border-amber-500 shadow-sm"
             />
             <div>
               <div className="flex items-center gap-1.5">
-                <h3 className="font-extrabold text-base text-stone-900 dark:text-stone-100">Shree Sanatan Seva Samiti</h3>
+                <h3 className="font-extrabold text-base text-stone-900 dark:text-stone-100">{displayName}</h3>
                 <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
               </div>
               <p className="text-xs text-amber-600 dark:text-amber-500 font-bold mt-0.5">Verified Organizer & Trustee</p>

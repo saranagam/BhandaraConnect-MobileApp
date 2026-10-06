@@ -3,6 +3,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 const config: CapacitorConfig = {
   appId: 'com.bhandaraconnect.app',
   appName: 'BhandaraConnect',
+  // App auth runs on the hosted Next.js server (Clerk). Local `out/` is unused while server.url is set.
   webDir: 'out',
 
   server: {
