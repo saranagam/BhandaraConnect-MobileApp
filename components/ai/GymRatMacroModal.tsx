@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { X, Dumbbell, Sparkles, Upload, Flame, CheckCircle2, AlertCircle, RefreshCw } from 'lucide-react';
 import { useBhandara } from '@/context/BhandaraContext';
 import { MacroResult } from '@/types/bhandara';
+import { estimateMacros } from '@/utils/macroEstimator';
 
 interface GymRatMacroModalProps {
   onClose: () => void;
@@ -98,7 +99,7 @@ export const GymRatMacroModal: React.FC<GymRatMacroModalProps> = ({ onClose }) =
         exit={{ opacity: 0, scale: 0.9, y: 15 }}
         transition={{ type: 'spring', damping: 25, stiffness: 350 }}
         className="bg-slate-900 border border-slate-700 rounded-3xl w-full p-5 shadow-2xl space-y-4 no-scrollbar max-h-[92vh] overflow-y-auto"
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e: React.MouseEvent) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="flex items-center justify-between border-b border-slate-800 pb-3">

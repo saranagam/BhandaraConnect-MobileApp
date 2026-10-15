@@ -97,7 +97,7 @@ export const EventDrawer: React.FC<EventDrawerProps> = ({ event, onClose }) => {
         exit={{ y: '100%' }}
         transition={{ type: 'spring', damping: 25, stiffness: 300 }}
         className="bg-slate-900 border-t border-slate-700 rounded-t-3xl max-h-[90vh] overflow-y-auto flex flex-col w-full shadow-2xl no-scrollbar"
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e: React.MouseEvent) => e.stopPropagation()}
       >
         {/* Header Cover Image */}
         <div className="relative h-48 w-full shrink-0">

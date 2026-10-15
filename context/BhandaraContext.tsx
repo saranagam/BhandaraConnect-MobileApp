@@ -175,23 +175,23 @@ export const BhandaraProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   // Firestore Realtime Listeners & Local Storage Fallback
   useEffect(() => {
     if (db) {
-      const unsubEvents = onSnapshot(collection(db, 'bhandara_events'), (snapshot) => {
+      const unsubEvents = onSnapshot(collection(db, 'bhandara_events'), (snapshot: any) => {
         if (!snapshot.empty) {
-          const remoteEvents = snapshot.docs.map((doc) => doc.data() as BhandaraEvent);
+          const remoteEvents = snapshot.docs.map((doc: any) => doc.data() as BhandaraEvent);
           setEvents(remoteEvents);
         }
       });
 
-      const unsubReels = onSnapshot(collection(db, 'bhandara_reels'), (snapshot) => {
+      const unsubReels = onSnapshot(collection(db, 'bhandara_reels'), (snapshot: any) => {
         if (!snapshot.empty) {
-          const remoteReels = snapshot.docs.map((doc) => doc.data() as ReelPost);
+          const remoteReels = snapshot.docs.map((doc: any) => doc.data() as ReelPost);
           setReels(remoteReels);
         }
       });
 
-      const unsubLF = onSnapshot(collection(db, 'bhandara_lostfound'), (snapshot) => {
+      const unsubLF = onSnapshot(collection(db, 'bhandara_lostfound'), (snapshot: any) => {
         if (!snapshot.empty) {
-          const remoteLF = snapshot.docs.map((doc) => doc.data() as LostFoundItem);
+          const remoteLF = snapshot.docs.map((doc: any) => doc.data() as LostFoundItem);
           setLostFoundItems(remoteLF);
         }
       });
