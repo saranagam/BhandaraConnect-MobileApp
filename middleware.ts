@@ -1,15 +1,15 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 const publishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 const secretKey = process.env.CLERK_SECRET_KEY;
 
-const isConfigured =
-  Boolean(publishableKey) &&
-  !publishableKey?.includes('xxxxxxxx') &&
-  !publishableKey?.includes('example.com') &&
-  Boolean(secretKey) &&
-  !secretKey?.includes('xxxxxxxx');
+const isConfigured = Boolean(
+  publishableKey &&
+  secretKey &&
+  !publishableKey.includes('xxxxxxxx') &&
+  !publishableKey.includes('example.com')
+);
 
 const isPublicRoute = createRouteMatcher([
   '/login(.*)',
@@ -18,7 +18,7 @@ const isPublicRoute = createRouteMatcher([
   '/sso-callback(.*)',
 ]);
 
-const middlewareHandler = isConfigured
+const clerkHandler = isConfigured
   ? clerkMiddleware(async (auth: any, request: any) => {
       if (!isPublicRoute(request)) {
         try {
@@ -30,9 +30,19 @@ const middlewareHandler = isConfigured
         }
       }
     })
-  : () => NextResponse.next();
+  : null;
 
-export default middlewareHandler;
+export default async function middleware(request: NextRequest, event: any) {
+  if (clerkHandler) {
+    try {
+      return await clerkHandler(request, event);
+    } catch (err) {
+      console.error('Clerk middleware error:', err);
+      return NextResponse.next();
+    }
+  }
+  return NextResponse.next();
+}
 
 export const config = {
   matcher: [
